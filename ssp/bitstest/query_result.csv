@@ -1,0 +1,740 @@
+	partner_key	ab_slot1_variant	event_count	freq
+0	Partner A	Control	1	114641
+1	Partner A	Control	2	41238
+2	Partner A	Control	3	25485
+3	Partner A	Control	4	17857
+4	Partner A	Control	5	13168
+5	Partner A	Control	6	10366
+6	Partner A	Control	7	8477
+7	Partner A	Control	8	6948
+8	Partner A	Control	9	5715
+9	Partner A	Control	10	4923
+10	Partner A	Control	11	4335
+11	Partner A	Control	12	3806
+12	Partner A	Control	13	3280
+13	Partner A	Control	14	2917
+14	Partner A	Control	15	2624
+15	Partner A	Control	16	2427
+16	Partner A	Control	17	2232
+17	Partner A	Control	18	1928
+18	Partner A	Control	19	1757
+19	Partner A	Control	20	1545
+20	Partner A	Control	21	1414
+21	Partner A	Control	22	1291
+22	Partner A	Control	23	1176
+23	Partner A	Control	24	1042
+24	Partner A	Control	25	1047
+25	Partner A	Control	26	924
+26	Partner A	Control	27	923
+27	Partner A	Control	28	766
+28	Partner A	Control	29	706
+29	Partner A	Control	30	663
+30	Partner A	Control	31	639
+31	Partner A	Control	32	533
+32	Partner A	Control	33	581
+33	Partner A	Control	34	511
+34	Partner A	Control	35	471
+35	Partner A	Control	36	409
+36	Partner A	Control	37	393
+37	Partner A	Control	38	384
+38	Partner A	Control	39	347
+39	Partner A	Control	40	368
+40	Partner A	Control	41	322
+41	Partner A	Control	42	294
+42	Partner A	Control	43	263
+43	Partner A	Control	44	265
+44	Partner A	Control	45	264
+45	Partner A	Control	46	246
+46	Partner A	Control	47	210
+47	Partner A	Control	48	222
+48	Partner A	Control	49	207
+49	Partner A	Control	50	202
+50	Partner A	Control	51	164
+51	Partner A	Control	52	173
+52	Partner A	Control	53	149
+53	Partner A	Control	54	150
+54	Partner A	Control	55	130
+55	Partner A	Control	56	144
+56	Partner A	Control	57	121
+57	Partner A	Control	58	127
+58	Partner A	Control	59	125
+59	Partner A	Control	60	100
+60	Partner A	Control	61	101
+61	Partner A	Control	62	107
+62	Partner A	Control	63	92
+63	Partner A	Control	64	88
+64	Partner A	Control	65	90
+65	Partner A	Control	66	84
+66	Partner A	Control	67	70
+67	Partner A	Control	68	84
+68	Partner A	Control	69	77
+69	Partner A	Control	70	70
+70	Partner A	Control	71	67
+71	Partner A	Control	72	62
+72	Partner A	Control	73	58
+73	Partner A	Control	74	59
+74	Partner A	Control	75	47
+75	Partner A	Control	76	50
+76	Partner A	Control	77	48
+77	Partner A	Control	78	49
+78	Partner A	Control	79	53
+79	Partner A	Control	80	42
+80	Partner A	Control	81	44
+81	Partner A	Control	82	42
+82	Partner A	Control	83	26
+83	Partner A	Control	84	55
+84	Partner A	Control	85	29
+85	Partner A	Control	86	40
+86	Partner A	Control	87	27
+87	Partner A	Control	88	33
+88	Partner A	Control	89	19
+89	Partner A	Control	90	33
+90	Partner A	Control	91	29
+91	Partner A	Control	92	26
+92	Partner A	Control	93	21
+93	Partner A	Control	94	26
+94	Partner A	Control	95	22
+95	Partner A	Control	96	21
+96	Partner A	Control	97	19
+97	Partner A	Control	98	17
+98	Partner A	Control	99	18
+99	Partner A	Control	100	20
+100	Partner A	Control	101	17
+101	Partner A	Control	102	10
+102	Partner A	Control	103	16
+103	Partner A	Control	104	15
+104	Partner A	Control	105	13
+105	Partner A	Control	106	11
+106	Partner A	Control	107	15
+107	Partner A	Control	108	15
+108	Partner A	Control	109	12
+109	Partner A	Control	110	13
+110	Partner A	Control	111	15
+111	Partner A	Control	112	12
+112	Partner A	Control	113	16
+113	Partner A	Control	114	3
+114	Partner A	Control	115	7
+115	Partner A	Control	116	18
+116	Partner A	Control	117	10
+117	Partner A	Control	118	10
+118	Partner A	Control	119	12
+119	Partner A	Control	120	11
+120	Partner A	Control	121	11
+121	Partner A	Control	122	7
+122	Partner A	Control	123	8
+123	Partner A	Control	124	10
+124	Partner A	Control	125	8
+125	Partner A	Control	126	10
+126	Partner A	Control	127	10
+127	Partner A	Control	128	9
+128	Partner A	Control	129	9
+129	Partner A	Control	130	11
+130	Partner A	Control	131	11
+131	Partner A	Control	132	6
+132	Partner A	Control	133	7
+133	Partner A	Control	134	7
+134	Partner A	Control	135	4
+135	Partner A	Control	136	5
+136	Partner A	Control	137	3
+137	Partner A	Control	138	3
+138	Partner A	Control	139	6
+139	Partner A	Control	140	5
+140	Partner A	Control	141	8
+141	Partner A	Control	142	3
+142	Partner A	Control	143	2
+143	Partner A	Control	144	5
+144	Partner A	Control	145	7
+145	Partner A	Control	146	3
+146	Partner A	Control	147	2
+147	Partner A	Control	148	1
+148	Partner A	Control	149	7
+149	Partner A	Control	150	2
+150	Partner A	Control	151	8
+151	Partner A	Control	152	9
+152	Partner A	Control	153	6
+153	Partner A	Control	154	2
+154	Partner A	Control	155	2
+155	Partner A	Control	156	5
+156	Partner A	Control	159	1
+157	Partner A	Control	160	1
+158	Partner A	Control	161	4
+159	Partner A	Control	162	5
+160	Partner A	Control	163	4
+161	Partner A	Control	164	2
+162	Partner A	Control	165	4
+163	Partner A	Control	166	2
+164	Partner A	Control	167	2
+165	Partner A	Control	168	1
+166	Partner A	Control	169	1
+167	Partner A	Control	170	3
+168	Partner A	Control	171	5
+169	Partner A	Control	172	1
+170	Partner A	Control	173	3
+171	Partner A	Control	174	1
+172	Partner A	Control	175	4
+173	Partner A	Control	176	1
+174	Partner A	Control	177	10
+175	Partner A	Control	178	3
+176	Partner A	Control	179	1
+177	Partner A	Control	180	4
+178	Partner A	Control	181	1
+179	Partner A	Control	182	1
+180	Partner A	Control	183	1
+181	Partner A	Control	184	1
+182	Partner A	Control	185	3
+183	Partner A	Control	186	2
+184	Partner A	Control	187	2
+185	Partner A	Control	188	3
+186	Partner A	Control	190	2
+187	Partner A	Control	191	3
+188	Partner A	Control	193	3
+189	Partner A	Control	194	2
+190	Partner A	Control	195	1
+191	Partner A	Control	196	3
+192	Partner A	Control	199	3
+193	Partner A	Control	201	2
+194	Partner A	Control	202	2
+195	Partner A	Control	204	2
+196	Partner A	Control	206	2
+197	Partner A	Control	207	1
+198	Partner A	Control	208	2
+199	Partner A	Control	211	1
+200	Partner A	Control	213	1
+201	Partner A	Control	214	2
+202	Partner A	Control	216	1
+203	Partner A	Control	217	1
+204	Partner A	Control	221	2
+205	Partner A	Control	223	1
+206	Partner A	Control	226	1
+207	Partner A	Control	227	1
+208	Partner A	Control	228	1
+209	Partner A	Control	231	2
+210	Partner A	Control	235	1
+211	Partner A	Control	236	1
+212	Partner A	Control	246	1
+213	Partner A	Control	248	1
+214	Partner A	Control	250	1
+215	Partner A	Control	251	1
+216	Partner A	Control	253	1
+217	Partner A	Control	258	1
+218	Partner A	Control	260	1
+219	Partner A	Control	261	2
+220	Partner A	Control	263	1
+221	Partner A	Control	267	1
+222	Partner A	Control	272	1
+223	Partner A	Control	273	1
+224	Partner A	Control	284	1
+225	Partner A	Control	285	1
+226	Partner A	Control	296	1
+227	Partner A	Control	305	1
+228	Partner A	Control	310	1
+229	Partner A	Control	312	1
+230	Partner A	Control	320	1
+231	Partner A	Control	339	1
+232	Partner A	Control	360	1
+233	Partner A	Control	369	1
+234	Partner A	Control	384	1
+235	Partner A	Control	413	1
+236	Partner A	Control	433	1
+237	Partner A	Control	435	1
+238	Partner A	Control	454	1
+239	Partner A	Control	510	1
+240	Partner A	Control	574	1
+241	Partner A	Test	1	113014
+242	Partner A	Test	2	40418
+243	Partner A	Test	3	24977
+244	Partner A	Test	4	17196
+245	Partner A	Test	5	12880
+246	Partner A	Test	6	10584
+247	Partner A	Test	7	8772
+248	Partner A	Test	8	7255
+249	Partner A	Test	9	6227
+250	Partner A	Test	10	5337
+251	Partner A	Test	11	4541
+252	Partner A	Test	12	4092
+253	Partner A	Test	13	3526
+254	Partner A	Test	14	3149
+255	Partner A	Test	15	2777
+256	Partner A	Test	16	2587
+257	Partner A	Test	17	2288
+258	Partner A	Test	18	2079
+259	Partner A	Test	19	1814
+260	Partner A	Test	20	1709
+261	Partner A	Test	21	1405
+262	Partner A	Test	22	1400
+263	Partner A	Test	23	1319
+264	Partner A	Test	24	1122
+265	Partner A	Test	25	1046
+266	Partner A	Test	26	1025
+267	Partner A	Test	27	958
+268	Partner A	Test	28	831
+269	Partner A	Test	29	786
+270	Partner A	Test	30	756
+271	Partner A	Test	31	702
+272	Partner A	Test	32	687
+273	Partner A	Test	33	596
+274	Partner A	Test	34	537
+275	Partner A	Test	35	508
+276	Partner A	Test	36	515
+277	Partner A	Test	37	473
+278	Partner A	Test	38	417
+279	Partner A	Test	39	394
+280	Partner A	Test	40	413
+281	Partner A	Test	41	357
+282	Partner A	Test	42	310
+283	Partner A	Test	43	322
+284	Partner A	Test	44	274
+285	Partner A	Test	45	276
+286	Partner A	Test	46	276
+287	Partner A	Test	47	261
+288	Partner A	Test	48	234
+289	Partner A	Test	49	214
+290	Partner A	Test	50	233
+291	Partner A	Test	51	184
+292	Partner A	Test	52	176
+293	Partner A	Test	53	172
+294	Partner A	Test	54	140
+295	Partner A	Test	55	152
+296	Partner A	Test	56	143
+297	Partner A	Test	57	141
+298	Partner A	Test	58	113
+299	Partner A	Test	59	110
+300	Partner A	Test	60	93
+301	Partner A	Test	61	121
+302	Partner A	Test	62	97
+303	Partner A	Test	63	123
+304	Partner A	Test	64	79
+305	Partner A	Test	65	103
+306	Partner A	Test	66	104
+307	Partner A	Test	67	87
+308	Partner A	Test	68	76
+309	Partner A	Test	69	83
+310	Partner A	Test	70	80
+311	Partner A	Test	71	64
+312	Partner A	Test	72	65
+313	Partner A	Test	73	52
+314	Partner A	Test	74	56
+315	Partner A	Test	75	55
+316	Partner A	Test	76	51
+317	Partner A	Test	77	49
+318	Partner A	Test	78	57
+319	Partner A	Test	79	36
+320	Partner A	Test	80	46
+321	Partner A	Test	81	49
+322	Partner A	Test	82	47
+323	Partner A	Test	83	41
+324	Partner A	Test	84	53
+325	Partner A	Test	85	31
+326	Partner A	Test	86	40
+327	Partner A	Test	87	42
+328	Partner A	Test	88	34
+329	Partner A	Test	89	35
+330	Partner A	Test	90	24
+331	Partner A	Test	91	30
+332	Partner A	Test	92	27
+333	Partner A	Test	93	24
+334	Partner A	Test	94	28
+335	Partner A	Test	95	27
+336	Partner A	Test	96	24
+337	Partner A	Test	97	21
+338	Partner A	Test	98	21
+339	Partner A	Test	99	20
+340	Partner A	Test	100	23
+341	Partner A	Test	101	8
+342	Partner A	Test	102	24
+343	Partner A	Test	103	19
+344	Partner A	Test	104	17
+345	Partner A	Test	105	20
+346	Partner A	Test	106	14
+347	Partner A	Test	107	11
+348	Partner A	Test	108	23
+349	Partner A	Test	109	17
+350	Partner A	Test	110	12
+351	Partner A	Test	111	17
+352	Partner A	Test	112	11
+353	Partner A	Test	113	18
+354	Partner A	Test	114	7
+355	Partner A	Test	115	9
+356	Partner A	Test	116	14
+357	Partner A	Test	117	10
+358	Partner A	Test	118	15
+359	Partner A	Test	119	10
+360	Partner A	Test	120	12
+361	Partner A	Test	121	6
+362	Partner A	Test	122	7
+363	Partner A	Test	123	8
+364	Partner A	Test	124	8
+365	Partner A	Test	125	7
+366	Partner A	Test	126	13
+367	Partner A	Test	127	7
+368	Partner A	Test	128	9
+369	Partner A	Test	129	9
+370	Partner A	Test	130	7
+371	Partner A	Test	131	8
+372	Partner A	Test	132	7
+373	Partner A	Test	133	6
+374	Partner A	Test	134	5
+375	Partner A	Test	135	6
+376	Partner A	Test	136	5
+377	Partner A	Test	137	2
+378	Partner A	Test	138	3
+379	Partner A	Test	139	2
+380	Partner A	Test	140	2
+381	Partner A	Test	141	6
+382	Partner A	Test	142	5
+383	Partner A	Test	143	4
+384	Partner A	Test	144	12
+385	Partner A	Test	145	4
+386	Partner A	Test	146	8
+387	Partner A	Test	147	4
+388	Partner A	Test	148	5
+389	Partner A	Test	149	2
+390	Partner A	Test	150	5
+391	Partner A	Test	151	1
+392	Partner A	Test	152	4
+393	Partner A	Test	153	2
+394	Partner A	Test	154	3
+395	Partner A	Test	155	3
+396	Partner A	Test	156	6
+397	Partner A	Test	157	5
+398	Partner A	Test	158	5
+399	Partner A	Test	159	3
+400	Partner A	Test	162	5
+401	Partner A	Test	163	4
+402	Partner A	Test	164	4
+403	Partner A	Test	165	6
+404	Partner A	Test	167	1
+405	Partner A	Test	168	3
+406	Partner A	Test	169	4
+407	Partner A	Test	170	3
+408	Partner A	Test	171	1
+409	Partner A	Test	172	1
+410	Partner A	Test	173	1
+411	Partner A	Test	174	2
+412	Partner A	Test	175	2
+413	Partner A	Test	176	3
+414	Partner A	Test	177	1
+415	Partner A	Test	178	1
+416	Partner A	Test	179	4
+417	Partner A	Test	180	1
+418	Partner A	Test	181	2
+419	Partner A	Test	182	1
+420	Partner A	Test	184	7
+421	Partner A	Test	186	3
+422	Partner A	Test	188	2
+423	Partner A	Test	189	1
+424	Partner A	Test	190	1
+425	Partner A	Test	191	1
+426	Partner A	Test	192	1
+427	Partner A	Test	194	2
+428	Partner A	Test	196	2
+429	Partner A	Test	197	4
+430	Partner A	Test	198	2
+431	Partner A	Test	199	1
+432	Partner A	Test	200	1
+433	Partner A	Test	201	2
+434	Partner A	Test	202	1
+435	Partner A	Test	203	2
+436	Partner A	Test	204	2
+437	Partner A	Test	206	1
+438	Partner A	Test	210	4
+439	Partner A	Test	211	1
+440	Partner A	Test	215	2
+441	Partner A	Test	218	3
+442	Partner A	Test	220	1
+443	Partner A	Test	221	1
+444	Partner A	Test	230	1
+445	Partner A	Test	231	3
+446	Partner A	Test	233	1
+447	Partner A	Test	234	1
+448	Partner A	Test	235	1
+449	Partner A	Test	236	1
+450	Partner A	Test	237	1
+451	Partner A	Test	238	1
+452	Partner A	Test	239	1
+453	Partner A	Test	243	1
+454	Partner A	Test	244	1
+455	Partner A	Test	245	1
+456	Partner A	Test	246	1
+457	Partner A	Test	247	2
+458	Partner A	Test	260	1
+459	Partner A	Test	261	1
+460	Partner A	Test	272	1
+461	Partner A	Test	273	1
+462	Partner A	Test	279	1
+463	Partner A	Test	281	1
+464	Partner A	Test	282	2
+465	Partner A	Test	289	1
+466	Partner A	Test	290	2
+467	Partner A	Test	298	1
+468	Partner A	Test	322	1
+469	Partner A	Test	340	1
+470	Partner A	Test	345	1
+471	Partner A	Test	359	1
+472	Partner A	Test	403	1
+473	Partner A	Test	418	1
+474	Partner A	Test	440	1
+475	Partner A	Test	474	2
+476	Partner A	Test	501	1
+477	Partner A	Test	536	1
+478	Partner A	Test	540	1
+479	Partner A	Test	546	1
+480	Partner A	Test	658	1
+481	Partner B		1	343613
+482	Partner B		2	89913
+483	Partner B		3	45480
+484	Partner B		4	27430
+485	Partner B		5	18213
+486	Partner B		6	12704
+487	Partner B		7	9409
+488	Partner B		8	7217
+489	Partner B		9	5779
+490	Partner B		10	4573
+491	Partner B		11	3755
+492	Partner B		12	3150
+493	Partner B		13	2595
+494	Partner B		14	2205
+495	Partner B		15	1909
+496	Partner B		16	1583
+497	Partner B		17	1371
+498	Partner B		18	1164
+499	Partner B		19	1018
+500	Partner B		20	930
+501	Partner B		21	859
+502	Partner B		22	707
+503	Partner B		23	664
+504	Partner B		24	563
+505	Partner B		25	485
+506	Partner B		26	472
+507	Partner B		27	409
+508	Partner B		28	369
+509	Partner B		29	353
+510	Partner B		30	319
+511	Partner B		31	298
+512	Partner B		32	249
+513	Partner B		33	237
+514	Partner B		34	216
+515	Partner B		35	210
+516	Partner B		36	195
+517	Partner B		37	174
+518	Partner B		38	143
+519	Partner B		39	170
+520	Partner B		40	152
+521	Partner B		41	136
+522	Partner B		42	133
+523	Partner B		43	124
+524	Partner B		44	97
+525	Partner B		45	91
+526	Partner B		46	105
+527	Partner B		47	102
+528	Partner B		48	65
+529	Partner B		49	87
+530	Partner B		50	80
+531	Partner B		51	70
+532	Partner B		52	52
+533	Partner B		53	53
+534	Partner B		54	47
+535	Partner B		55	54
+536	Partner B		56	58
+537	Partner B		57	42
+538	Partner B		58	54
+539	Partner B		59	41
+540	Partner B		60	38
+541	Partner B		61	51
+542	Partner B		62	42
+543	Partner B		63	39
+544	Partner B		64	41
+545	Partner B		65	37
+546	Partner B		66	12
+547	Partner B		67	35
+548	Partner B		68	31
+549	Partner B		69	24
+550	Partner B		70	20
+551	Partner B		71	24
+552	Partner B		72	17
+553	Partner B		73	21
+554	Partner B		74	23
+555	Partner B		75	20
+556	Partner B		76	15
+557	Partner B		77	16
+558	Partner B		78	27
+559	Partner B		79	17
+560	Partner B		80	16
+561	Partner B		81	17
+562	Partner B		82	13
+563	Partner B		83	13
+564	Partner B		84	14
+565	Partner B		85	15
+566	Partner B		86	10
+567	Partner B		87	17
+568	Partner B		88	17
+569	Partner B		89	8
+570	Partner B		90	13
+571	Partner B		91	11
+572	Partner B		92	6
+573	Partner B		93	8
+574	Partner B		94	11
+575	Partner B		95	10
+576	Partner B		96	11
+577	Partner B		97	13
+578	Partner B		98	5
+579	Partner B		99	9
+580	Partner B		100	7
+581	Partner B		101	8
+582	Partner B		102	6
+583	Partner B		103	5
+584	Partner B		104	9
+585	Partner B		105	11
+586	Partner B		106	10
+587	Partner B		107	6
+588	Partner B		108	9
+589	Partner B		109	4
+590	Partner B		110	9
+591	Partner B		111	8
+592	Partner B		112	3
+593	Partner B		113	8
+594	Partner B		114	5
+595	Partner B		115	3
+596	Partner B		116	4
+597	Partner B		117	6
+598	Partner B		118	10
+599	Partner B		119	3
+600	Partner B		120	3
+601	Partner B		121	4
+602	Partner B		122	4
+603	Partner B		123	7
+604	Partner B		124	4
+605	Partner B		125	6
+606	Partner B		126	2
+607	Partner B		127	4
+608	Partner B		128	1
+609	Partner B		129	4
+610	Partner B		130	3
+611	Partner B		131	3
+612	Partner B		132	3
+613	Partner B		133	3
+614	Partner B		134	1
+615	Partner B		135	2
+616	Partner B		136	2
+617	Partner B		137	3
+618	Partner B		138	1
+619	Partner B		139	2
+620	Partner B		140	2
+621	Partner B		141	1
+622	Partner B		142	2
+623	Partner B		143	2
+624	Partner B		144	1
+625	Partner B		145	4
+626	Partner B		146	3
+627	Partner B		147	2
+628	Partner B		148	5
+629	Partner B		149	1
+630	Partner B		150	5
+631	Partner B		151	6
+632	Partner B		152	2
+633	Partner B		155	1
+634	Partner B		156	2
+635	Partner B		157	1
+636	Partner B		158	2
+637	Partner B		159	3
+638	Partner B		160	3
+639	Partner B		161	2
+640	Partner B		162	3
+641	Partner B		163	2
+642	Partner B		165	1
+643	Partner B		167	2
+644	Partner B		168	2
+645	Partner B		169	2
+646	Partner B		171	2
+647	Partner B		172	1
+648	Partner B		173	2
+649	Partner B		174	1
+650	Partner B		177	1
+651	Partner B		178	2
+652	Partner B		179	2
+653	Partner B		180	1
+654	Partner B		183	2
+655	Partner B		184	3
+656	Partner B		185	1
+657	Partner B		186	1
+658	Partner B		189	2
+659	Partner B		190	1
+660	Partner B		191	1
+661	Partner B		192	1
+662	Partner B		195	1
+663	Partner B		196	3
+664	Partner B		198	1
+665	Partner B		199	1
+666	Partner B		201	1
+667	Partner B		204	1
+668	Partner B		206	1
+669	Partner B		207	2
+670	Partner B		208	2
+671	Partner B		214	1
+672	Partner B		219	1
+673	Partner B		222	1
+674	Partner B		223	1
+675	Partner B		228	1
+676	Partner B		229	3
+677	Partner B		235	2
+678	Partner B		236	1
+679	Partner B		238	2
+680	Partner B		241	1
+681	Partner B		243	1
+682	Partner B		248	1
+683	Partner B		249	1
+684	Partner B		253	2
+685	Partner B		255	2
+686	Partner B		259	2
+687	Partner B		260	1
+688	Partner B		264	1
+689	Partner B		265	2
+690	Partner B		281	1
+691	Partner B		292	1
+692	Partner B		312	2
+693	Partner B		334	1
+694	Partner B		346	1
+695	Partner B		357	1
+696	Partner B		358	1
+697	Partner B		362	1
+698	Partner B		364	1
+699	Partner B		380	1
+700	Partner B		413	1
+701	Partner B		423	1
+702	Partner B		429	1
+703	Partner B		482	1
+704	Partner B		607	1
+705	Partner B		655	1
+706	Partner B		697	1
+707	Partner B		733	1
+708	Partner B		736	1
+709	Partner B		738	1
+710	Partner B		903	1
+711	Partner B		929	1
+712	Partner B		930	1
+713	Partner B		946	1
+714	Partner B		972	1
+715	Partner B		1026	1
+716	Partner B		1092	1
+717	Partner B		1224	1
+718	Partner B		1299	1
+719	Partner B		1328	1
+720	Partner B		1438	1
+721	Partner B		1542	1
+722	Partner B		1951	1
+723	Partner B		2049	1
+724	Partner B		2361	1
+725	Partner B		3002	1
+726	Partner B		3404	1
+727	Partner B		3466	1
+728	Partner B		5161	1
+729	Partner B		6174	1
+730	Partner B		6177	1
+731	Partner B		7448	1
+732	Partner B		7868	1
+733	Partner B		9548	1
+734	Partner B		12646	1
+735	Partner B		12651	1
+736	Partner B		14742	1
+737	Partner B		34347	1
+738	Partner B		56881	1
