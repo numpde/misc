@@ -1,7 +1,7 @@
 
-# RA, 2019-09-21
-
 # Auto-align upper/lower grid in twinx axes
+# RA, 2019-09-21
+# License: CC0 -- no rights reserved
 
 import numpy as np
 import matplotlib.pyplot as plt
