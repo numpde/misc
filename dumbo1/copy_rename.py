@@ -3,8 +3,9 @@
 
 import os
 import shutil
-import pandas as pd
+import pandas as pd, numpy as np
 import urllib.request
+import zipfile
 
 PARAM = {
 	'url': (open("UV/url.txt", 'r').readlines()).pop(0),
@@ -12,6 +13,7 @@ PARAM = {
 
 	'path_src': "UV/src/{name}.JPG",
 	'path_trg': "UV/trg/{name}.JPG",
+	'path_zip': "UV/zip/{name}.zip",
 }
 
 with urllib.request.urlopen(PARAM['url']) as response:
@@ -26,6 +28,9 @@ def filename_src(name):
 
 def filename_trg(sku):
 	return PARAM['path_trg'].format(name=sku)
+
+def filename_zip(sku):
+	return PARAM['path_zip'].format(name=sku)
 
 for (k, group) in df.groupby(['Product name', 'Color']):
 	print("----")
@@ -70,3 +75,30 @@ for (k, group) in df.groupby(['Product name', 'Color']):
 		(a, b) = (template_filename, filename_trg(sku))
 		print("Copying {} to {}".format(a, b))
 		shutil.copyfile(a, b)
+
+# ZIP ALL
+for (i, row) in df.iterrows():
+	print("----")
+
+	if (row['Zip'] == 'nozip'):
+		print("Skipping (nozip): {}".format(row['Code']))
+		continue
+
+	assert(np.isnan(row['Zip']))
+
+	(a, b) = (filename_trg(row['Code']), filename_zip(row['Code']))
+
+	if os.path.isfile(b):
+		print("Zip already exists, skipping: {}".format(b))
+		continue
+
+	if not os.path.isfile(a):
+		print("File not found: {}".format(a))
+		continue
+
+	try:
+		print("Zipping {} to {}".format(a, b))
+		zipfile.ZipFile(b, mode='w').write(a, os.path.basename(a))
+		print("OK")
+	except:
+		print("FAILED")
