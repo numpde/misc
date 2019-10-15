@@ -9,9 +9,9 @@ import tensorflow as tf
 import pandas as pd, numpy as np
 import matplotlib.pyplot as plt
 
-import progressbar
-from progressbar import progressbar as progress
-progressbar.streams.wrap_stderr()
+# import progressbar
+# from progressbar import progressbar as progress
+# progressbar.streams.wrap_stderr()
 
 from zipfile import ZipFile
 
@@ -20,7 +20,6 @@ import logging as logger
 
 # https://docs.python.org/3/library/contextlib.html#contextlib.redirect_stdout
 from contextlib import redirect_stdout
-
 
 
 # ~~~ INITIALIZATION ~~~ #
@@ -33,13 +32,16 @@ logger.basicConfig(level=logger.DEBUG, format="%(levelname)-8s [%(asctime)s] : %
 logger.getLogger('matplotlib').setLevel(logger.WARNING)
 
 
-# ~~~ HELPERS ~~~ #
+# ~~~ AUXILIARY ~~~ #
 
 # Example: assert(filename == makedirs(filename))
-makedirs = (lambda fn: os.makedirs(os.path.dirname(fn), exist_ok=True) or fn)
+makedirs = (lambda file: os.makedirs(os.path.dirname(file), exist_ok=True) or file)
+
+# Example: resizer(128, 128)(image)
+resizer = (lambda w, h: (lambda image: tf.image.resize(image, (w, h))))
 
 
-# ~~~ CONSTANTS ~~~ #
+# ~~~ PARAMETERS ~~~ #
 
 PARAM = {
 	# Archive containing images/*.png and labels/*.png
@@ -49,22 +51,26 @@ PARAM = {
 	# The labels for these are wrong (by inspection)
 	'bogus_label_ids': ["278"],
 
-	'training': dict(epochs=20),
+	#
+	'input_channels': 3,
 
-	# Neural net summary
+	# Image sizes
+	'to_original_size': resizer(256, 256),
+	'to_modeling_size': resizer(128, 128),
+
+	# Settings for model.fit
+	'training': dict(epochs=50),
+
+	# Output: Neural net summary
 	'out_base_model_info': makedirs("OUTPUT/info/base_model.txt"),
 	'out_full_model_info': makedirs("OUTPUT/info/full_model.txt"),
 
-	# Label predictions by the trained predictor
-	'out_predictions': makedirs("OUTPUT/predictions/{id}.png"),
+	# Output: Label predictions by the trained predictor
+	'out_predictions': makedirs("OUTPUT/predictions/{idx}.png"),
 }
 
 
-# ~~~ AUXILIARY ~~~ #
-
-def resizer(w, h):
-	return (lambda img: tf.image.resize(img, (w, h)))
-
+# ~~~ HELPERS ~~~ #
 
 def normalize_max(val=1):
 	return (lambda img: (img / (tf.math.reduce_max(img) or 1) * val))
@@ -89,9 +95,9 @@ def get_data_files(regex: str, reader) -> pd.Series:
 	return data
 
 
-def get_data():
+def get_data() -> pd.DataFrame:
 	logger.debug("Reading images/*.png")
-	images = get_data_files("images/(.*).png$", (lambda fd: plt.imread(fd)[..., :3]))
+	images = get_data_files("images/(.*).png$", (lambda fd: plt.imread(fd)[..., 0:PARAM['input_channels']]))
 
 	logger.debug("Reading labels/*.png")
 	labels = get_data_files("labels/(.*).png$", (lambda fd: plt.imread(fd)[..., np.newaxis]))
@@ -99,7 +105,7 @@ def get_data():
 	df = pd.DataFrame({'image': images, 'label': labels})
 	df.loc[PARAM['bogus_label_ids'], 'label'] = np.nan
 
-	# Does not work b/c of nan values
+	# Does not work because of missing labels values
 	#df = df.transform(resizer(128, 128))
 
 	logger.debug("Got {n} images and {m} labels".format(n=df['image'].count(), m=df['label'].count()))
@@ -107,15 +113,17 @@ def get_data():
 	return df
 
 
-def make_dataset(df: pd.DataFrame):
+# ~~~ PREPROCESSING ~~~ #
+
+def make_tf_dataset(df: pd.DataFrame) -> tf.data.Dataset:
 	# Sanity check
 	img = next(iter(df['image']))
-	logger.debug("Shape before / after: {} / {}".format(img.shape, resizer(128, 128)(tf.convert_to_tensor(img)).shape))
+	logger.debug("Shape before / after: {} / {}".format(img.shape, PARAM['to_modeling_size'](tf.convert_to_tensor(img)).shape))
 
 	logger.debug("Creating tf dataset")
 
-	X = tf.stack(list(map(resizer(128, 128), df['image'])))
-	y = tf.stack(list(map(normalize_max(1), map(resizer(128, 128), df['label']))))
+	X = tf.stack(list(map(PARAM['to_modeling_size'], df['image'])))
+	y = tf.stack(list(map(normalize_max(1), map(PARAM['to_modeling_size'], df['label']))))
 
 	# X = tf.stack([tf.stack(df_train['image'])], axis=1)
 
@@ -146,9 +154,9 @@ def see_data(df: pd.DataFrame):
 
 # ~~~ MODEL ~~~ #
 
-# Based heavily on (2019-10-09)
+# Taken from (2019-10-09)
 # https://github.com/tensorflow/examples/blob/master/tensorflow_examples/models/pix2pix/pix2pix.py
-def upsample(filters, size, apply_dropout=False):
+def upsample_layer(filters, size, apply_dropout=True):
 	"""Upsamples an input.
 	Conv2DTranspose => Batchnorm => Dropout => Relu
 	Args:
@@ -176,74 +184,85 @@ def upsample(filters, size, apply_dropout=False):
 	return result
 
 
-
 # Based heavily on (2019-10-09)
 # https://www.tensorflow.org/tutorials/images/segmentation
 def make_model():
-	# Pretrained model for the encoder
+	# Pretrained model for the encoder with frozen weights
 	# https://arxiv.org/abs/1801.04381
 	# https://ai.googleblog.com/2018/04/mobilenetv2-next-generation-of-on.html
-	encoder = tf.keras.applications.MobileNetV2(input_shape=[128, 128, 3], include_top=False)
-
-	# Sanity check
-	img = tf.cast(np.random.randn(1, 128, 128, 3), tf.float32)
-	encoder([img])
-
-	OUTPUT_CHANNELS = 2
-
-	# Freeze the encoder
+	encoder = tf.keras.applications.MobileNetV2(input_shape=[128, 128, PARAM['input_channels']], include_top=False)
 	encoder.trainable = False
+
+	# Sanity check: dimensions
+	img = tf.cast(np.random.randn(1, 128, 128, PARAM['input_channels']), tf.float32)
+	encoder([img])
 
 	# Write summary of the BASE model to file
 	with redirect_stdout(open(PARAM['out_base_model_info'], 'w')):
 		encoder.summary()
 
-	# Tap into the activations of these intermediate layers
-	layer_names = [
-		'block_1_expand_relu',  # 64x64
-		'block_3_expand_relu',  # 32x32
-		'block_6_expand_relu',  # 16x16
-		'block_13_expand_relu', #  8x8
-		'block_16_project',     #  4x4
-	]
+	# Construct the U-Net predictor
+	def unet():
+		# Number of prediction classes
+		OUTPUT_CHANNELS = 2
 
-	tap_layers = [encoder.get_layer(name).output for name in layer_names]
+		# Input layer of the model
+		inputs = tf.keras.layers.Input(shape=[128, 128, PARAM['input_channels']])
 
-	# Non-trainable feature extraction model
-	down_stack = tf.keras.Model(inputs=encoder.input, outputs=tap_layers)
-	down_stack.trainable = False
-
-	up_stack = [
-		upsample(512, 3), #  4x4  ->  8x8
-		upsample(256, 3), #  8x8  -> 16x16
-		upsample(128, 3), # 16x16 -> 32x32
-		upsample(64, 3),  # 32x32 -> 64x64
-	]
-
-	def unet_model(output_channels):
-		# This is the last layer of the model
+		# Last layer of the model (output layer)
 		# 64x64 -> 128x128
-		last = tf.keras.layers.Conv2DTranspose(output_channels, 3, strides=2, padding='same', activation='softmax')
+		# https://www.tensorflow.org/api_docs/python/tf/keras/layers/Conv2DTranspose
+		output = tf.keras.layers.Conv2DTranspose(activation='softmax', filters=OUTPUT_CHANNELS, kernel_size=3, strides=2, padding='same')
 
-		inputs = tf.keras.layers.Input(shape=[128, 128, 3])
-		x = inputs
+		# Tap into the activations of intermediate layers in the encoder
+		tap_layers = [
+			encoder.get_layer(name).output
+			#
+			for name in [
+				'block_1_expand_relu',  # 64x64
+				'block_3_expand_relu',  # 32x32
+				'block_6_expand_relu',  # 16x16
+				'block_13_expand_relu', #  8x8
+				# "Tip" of the encoder:
+				'block_16_project',     #  4x4
+			]
+		]
 
-		# Downsampling through the model
-		skips = down_stack(x)
-		x = skips[-1]
-		skips = reversed(skips[:-1])
+		# Frozen feature-extraction sub-model
+		extractor = tf.keras.Model(inputs=encoder.input, outputs=tap_layers)
+		extractor.trainable = False
 
-		# Upsampling and establishing the skip connections
-		for (up, skip) in zip(up_stack, skips):
-			x = up(x)
-			concat = tf.keras.layers.Concatenate()
-			x = concat([x, skip])
+		# Hook into the layers of the downsampling branch
+		[tracer, *down_stack] = reversed(extractor(inputs))
 
-		x = last(x)
+		# Create the layers for the upsampling branch
+		up_stack = [
+			upsample_layer(filters=filters, size=3)
+			#
+			# Down-scaled the number of filters [512, ..., 64]
+			# from the TF image-segmentation tutorial
+			for filters in [
+				96, #  4x4  ->  8x8
+				64, #  8x8  -> 16x16
+				32, # 16x16 -> 32x32
+				16, # 32x32 -> 64x64
+			]
+		]
 
-		return tf.keras.Model(inputs=inputs, outputs=x)
+		assert(len(down_stack) == len(up_stack))
 
-	model = unet_model(OUTPUT_CHANNELS)
+		# Upsample and connect feed from the encoder
+		# by going left-to-right in the diagram:
+		# tracer < down < down < down < down < inputs
+		#      `-> up -`> up -`> up -`> up -`> output
+		for (down, up) in zip(down_stack, up_stack):
+			# https://www.tensorflow.org/api_docs/python/tf/keras/layers/Concatenate
+			tracer = tf.keras.layers.concatenate([down, up(tracer)], axis=-1)
+
+		return tf.keras.Model(inputs=inputs, outputs=output(tracer))
+
+	# Construct the U-Net predictor
+	model = unet()
 
 	# Write summary of the FULL model to file
 	with redirect_stdout(open(PARAM['out_full_model_info'], 'w')):
@@ -260,47 +279,53 @@ def train(model, ds_train: tf.data.Dataset):
 	model.predict(img_batch)
 	model.predict([img_batch])
 
-	logger.debug("Training model")
+	logger.debug("Training the model")
 	history = model.fit(ds_train, **PARAM['training'])
 
 	return model
 
 
+def predict_segmentation_mask(model, image):
+	# Prediction (handle image size & the batch dimension)
+	label = model(tf.stack([PARAM['to_modeling_size'](image)]))[0]
+	label = PARAM['to_original_size'](label)
+	# Prediction proba for class '1'
+	label = label[..., 1]
+	# Remove boring dimensions, just in case
+	label = np.squeeze(label)
+	return label
+
+
 # ~~~ ENTRY ~~~ #
 
 def main():
-	model = make_model()
+	logger.info("Loading the dataset")
 
 	df = get_data()
-	df = dict(list(df.groupby(df['label'].isna())))
 
-	# Training set and out-of-sample set
-	(df_train, df_new) = (df[False], df[True])
-	del df
+	# Training set (i.e. 'label' is given) and out-of-sample set (i.e. 'label' is n/a)
+	(df_train, __) = map(df.groupby(df['label'].isna()).get_group, (False, True))
 
-	# Convert to a tensorflow dataset
-	ds_train = make_dataset(df_train)
+	logger.info("Building the tensorflow dataset")
 
-	# Train the predictor
+	ds_train = make_tf_dataset(df_train)
+
+	logger.info("Building the predictor")
+
+	model = make_model()
+
+	logger.info("Training the predictor")
+
 	model = train(model, ds_train)
 
-	# Save predictions to disk
-	logger.debug("Saving predictions")
+	logger.info("Saving predictions to disk")
 
-	for df in (df_new, df_train):
-		for (i, img) in pd.Series(df['image']).iteritems():
-			# Input, scale down
-			img = resizer(128, 128)(img)
-			# Prediction, scale up (handle the batch dimension)
-			lbl = model(tf.stack([img]))[0]
-			lbl = resizer(256, 256)(lbl)
-			# Prediction proba for class '1'
-			lbl = lbl[..., 1]
-			# Remove boring dimensions
-			lbl = np.squeeze(lbl)
+	for (idx, image) in pd.Series(df['image']).iteritems():
+		# Invoke the predictor
+		label = predict_segmentation_mask(model, image)
 
-			# https://stackoverflow.com/questions/902761/saving-a-numpy-array-as-an-image
-			plt.imsave(PARAM['out_predictions'].format(id=i), lbl, cmap='gray')
+		# https://stackoverflow.com/questions/902761/saving-a-numpy-array-as-an-image
+		plt.imsave(PARAM['out_predictions'].format(idx=idx), label, cmap='gray', vmax=1)
 
 
 if __name__ == "__main__":
