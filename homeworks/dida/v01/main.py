@@ -25,7 +25,7 @@ import logging as logger
 # https://docs.python.org/3/library/contextlib.html#contextlib.redirect_stdout
 from contextlib import redirect_stdout as stdout_to
 
-from . import plot_history
+import plot_history
 
 # https://pypi.org/project/percache/
 # import percache
@@ -66,7 +66,7 @@ PARAM = {
 	'datapass': os.getenv("DATAPASS", "").encode("UTF8"),
 
 	'use_dida_data': True,
-	'use_josm_data': False,
+	'use_josm_data': True,
 
 	# The labels for these are wrong (by inspection)
 	'bogus_label_ids': ["278"],
@@ -81,12 +81,13 @@ PARAM = {
 	#
 	'transmogrify_rs': np.random.RandomState(8),
 
-	# Settings for model.fit
-	'training': dict(epochs=33),
+	# Settings for training
+	'model.fit': dict(epochs=33),
 
 	# Output: Neural net summary
 	'out_base_model_info': makedirs("OUTPUT/info/base_model.txt"),
 	'out_full_model_info': makedirs("OUTPUT/info/full_model.txt"),
+	'out_full_model_graph': makedirs("OUTPUT/info/full_model.png"),
 
 	# Output: training progess
 	'out_intraining_pred': makedirs("OUTPUT/training/progress/intraining_{kind}_pred.png"),
@@ -116,7 +117,7 @@ def normalize_max(val=1):
 
 # ~~~ PREPROCESSING I ~~~ #
 
-def to_rg_noblue(image):
+def to_rgba(image):
 	assert(3 == len(image.shape)), "The image should have 3 dimensions: W x H x Channel"
 	assert(image.shape[2] in [3, 4]), "The image should have 3 or 4 channels"
 	if (image.shape[2] == 3):
@@ -156,7 +157,7 @@ def unzip_files(filename: str, regex: str, reader) -> pd.Series:
 
 def get_data_from(zipfile: str) -> pd.DataFrame:
 	logger.debug("Reading {}/images/*.png".format(zipfile))
-	images = unzip_files(zipfile, "images/(.*).png$", (lambda fd: to_rg_noblue(imread(fd))))
+	images = unzip_files(zipfile, "images/(.*).png$", (lambda fd: to_rgba(imread(fd))))
 
 	logger.debug("Reading {}/labels/*.png".format(zipfile))
 	labels = unzip_files(zipfile, "labels/(.*).png$", (lambda fd: to_grayscale(imread(fd))[..., np.newaxis]))
@@ -305,8 +306,8 @@ def make_model():
 		inputs = tf.keras.layers.Input(shape=[128, 128, 4])
 
 		# Separate RGB and Alpha channels
-		inputs_rgb = tf.keras.layers.Lambda(lambda x: x[..., 0:3])(inputs)
-		inputs_alpha = tf.keras.layers.Lambda(lambda x: x[..., 3:])(inputs)
+		inputs_rgb = tf.keras.layers.Lambda(lambda x: x[..., 0:3], name="get_rgb")(inputs)
+		inputs_alpha = tf.keras.layers.Lambda(lambda x: x[..., 3:], name="get_alpha")(inputs)
 
 		# Pretrained model for the encoder with frozen weights
 		# https://arxiv.org/abs/1801.04381
@@ -345,7 +346,7 @@ def make_model():
 		]
 
 		# Frozen feature-extraction sub-model
-		unet_extractor = tf.keras.Model(inputs=unet_encoder.input, outputs=unet_tap_layers)
+		unet_extractor = tf.keras.Model(inputs=unet_encoder.input, outputs=unet_tap_layers, name="MobileNetV2")
 		unet_extractor.trainable = False
 
 		# Hook into the layers of the downsampling branch
@@ -387,6 +388,8 @@ def make_model():
 	# Write summary of the FULL model to file
 	with stdout_to(open(PARAM['out_full_model_info'], 'w')):
 		model.summary()
+
+	tf.keras.utils.plot_model(model, PARAM['out_full_model_graph'], show_shapes=True, expand_nested=False, dpi=96)
 
 	optimizer = tf.keras.optimizers.Adam(amsgrad=True)
 	# optimizer = tf.keras.optimizers.SGD(learning_rate=1e-4)
@@ -444,7 +447,7 @@ def train(model, ds_train: tf.data.Dataset, ds_valid: tf.data.Dataset):
 
 	logger.debug("Training the model")
 
-	history = model.fit(ds_train, validation_data=ds_valid, callbacks=callbacks, **PARAM['training'])
+	history = model.fit(ds_train, validation_data=ds_valid, callbacks=callbacks, **PARAM['model.fit'])
 
 	return model
 
@@ -452,6 +455,11 @@ def train(model, ds_train: tf.data.Dataset, ds_valid: tf.data.Dataset):
 # ~~~ ENTRY ~~~ #
 
 def main():
+
+	logger.info("Building the predictor")
+
+	model = make_model()
+
 	logger.info("Loading the dataset")
 
 	df = get_data()
@@ -471,10 +479,6 @@ def main():
 
 	ds_train = make_tf_dataset(df_train)
 	ds_valid = make_tf_dataset(df_valid)
-
-	logger.info("Building the predictor")
-
-	model = make_model()
 
 	logger.info("Training the predictor")
 
