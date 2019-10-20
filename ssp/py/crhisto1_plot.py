@@ -4,6 +4,7 @@
 import pandas as pd
 import numpy as np
 import os
+import time
 import matplotlib.pyplot as plt
 from numpy.random import RandomState
 from joblib import Parallel, delayed
@@ -20,7 +21,7 @@ def fenumerate(arr):
 	arr = list(arr)
 	return zip(np.linspace(0, 1, 1 + len(arr))[1:], arr)
 
-def plot_histo(df):
+def plot_histo(df: pd.DataFrame):
 	#df = df.loc[df['ab_slot1_variant'] == '']
 
 	(fig, ax) = plt.subplots()
@@ -31,6 +32,45 @@ def plot_histo(df):
 
 	ov: pd.DataFrame
 	ov = df.loc[df['fp'] == True, ['o', 'v']]
+
+	df = df.loc[df['v'] > 0].dropna(axis=1).sort_values(by='v')
+	c = df['o']
+	v = df['v']
+	bins = np.logspace(0, np.log10(max(v)), 15)
+	binned_c = [c[(a < v) & (v <= b)] for (a, b) in zip(bins, bins[1:])]
+	binned_v = [v[(a < v) & (v <= b)] for (a, b) in zip(bins, bins[1:])]
+
+	# ax.hist(binned_c[2] > 0, bins=20, density=True, alpha=1)
+
+	ax.set_xscale('log')
+	ax.set_yscale('log')
+
+	import xgboost as xgb
+	# df['v'] = np.random.permutation(df['v']) # Destroys the pattern
+	df = df.sort_values(by='v')
+	model0 = xgb.XGBRegressor(n_estimators=100, objective='count:poisson', n_jobs=6).fit(df[['v']], df[['o']])
+	o_pred = model0.predict(df[['v']])
+	ax.scatter(v, o_pred, s=2, alpha=0.2)
+	xx = np.linspace(min(v), max(v), 100)
+	ax.plot(xx, 1 - np.exp(-xx / 66))
+	ax.grid()
+	plt.show()
+	exit(39)
+	y_rate_pred = pd.Series(model0.predict(X), index=y.index, name='rate')
+
+	for (cbin, vbin) in zip(binned_c, binned_v):
+		if not len(cbin):
+			continue
+		[vmin, vmax] = [np.min(vbin), np.max(vbin)]
+		theta = sum(cbin > 0) / len(cbin)
+		lam = np.mean(cbin) / sum(cbin)
+		print("{} <= Views <= {},  #Orders = {},  E[CR] = {},  E[Volume / TotVol] = {}".format(vmin, vmax, len(cbin), theta, lam))
+		ax.plot([vmin, vmax], [theta, theta], c='r')
+		ax.plot([vmin, vmax], [lam, lam], c='b')
+
+	plt.show()
+	exit(39)
+
 
 	std_o = np.std(df['o'])
 	avg_v = np.mean(df['v'])

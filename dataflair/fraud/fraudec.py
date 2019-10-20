@@ -26,22 +26,27 @@
 # https://www.kaggle.com/lct14558/imbalanced-data-why-you-should-not-use-roc-curve
 
 
-# TESTMODE = True  # Fast turnaround
-TESTMODE = False # Production
+TESTMODE = True  # Fast turnaround
+# TESTMODE = False # Production
 
+
+# (!) Import does not commute with helpers.commons
+from openTSNE.sklearn import TSNE
 
 from helpers.commons import logger
 from helpers.commons import makedirs
 from helpers import commons
 
+import re
 import pandas as pd
 import numpy as np
 from numpy.random import RandomState
 from collections import Counter
 
-from sklearn.manifold import TSNE
+# from sklearn.manifold import TSNE
 
 from sklearn.linear_model import LogisticRegression
+from sklearn.svm import SVC
 from sklearn.ensemble import RandomForestClassifier
 
 from sklearn.decomposition import PCA
@@ -52,12 +57,16 @@ from sklearn import metrics
 
 from contextlib import contextmanager
 
-import typing
+from typing import Iterator, Generator, Tuple
 import matplotlib.pyplot as plt
 
 
+# ~~~~ PROGRAM PARAMETERS REPO ~~~~ #
+
 PARAM = {
 	'data': "ORIGINALS/UV/creditcard.csv.zip",
+
+	'do_train': True,
 
 	'do_first_summary': False,
 	'first_summary': makedirs("OUTPUT/summary/summary_{of}.{ext}"),
@@ -77,7 +86,16 @@ PARAM = {
 
 	# ROC curves plot filename
 	'roc_fig': makedirs("OUTPUT/roc/{dataset}.{ext}"),
+	# Prevision vs Recall curves
+	'pvr_fig': makedirs("OUTPUT/pvr/{dataset}.{ext}"),
 
+	# Feature columns (regex with re.match)
+	'data_features_regex': ["Time*", "V*", "Amount"],
+	# Class labels column
+	'data_label_column': "Class",
+
+	# Options for fig.savefig
+	'savefig_kwargs': dict(bbox_inches='tight', pad_inches=0, dpi=300),
 }
 
 
@@ -96,55 +114,59 @@ def partition_2way(df, p: float, random_state: RandomState):
 
 
 @contextmanager
-def subplots(filename=None):
+def subplots(filename=None) -> Generator[Tuple[plt.Figure, plt.Axes], None, None]:
+	# Create a new figure
 	(fig, ax) = plt.subplots()
 	try:
 		yield (fig, ax)
 
+		# Save if filename provided, otherwise just show
 		if filename:
 			with open(filename, 'wb') as fd:
-				fig.savefig(fd, **commons.USUAL_ARGS['savefig'])
+				fig.savefig(fd, **PARAM['savefig_kwargs'])
 		else:
 			plt.show()
 	finally:
+		# Close the figure, if possible
 		try:
 			plt.close(fig)
 		except:
 			pass
 
 
-def df2xy(df: pd.DataFrame) -> typing.Tuple[pd.DataFrame, pd.Series]:
+def df2xy(df: pd.DataFrame) -> Tuple[pd.DataFrame, pd.Series]:
 	# Select features columns
-	X = df[[col for col in df.columns if (col.startswith('V') or (col == "Amount"))]]
+	X = df[[col for col in df.columns if any(re.match(feat_like, col) for feat_like in PARAM['data_features_regex'])]]
 
 	# Class labels column
-	y = df['Class']
+	y = df[PARAM['data_label_column']]
 
 	return (X, y)
 
 
 # ~~~~ PREDICTOR METRICS CURVES ~~~~ #
 
+# ROC curve
 def plot_roc(y, p, filename=None):
 	(fpr, tpr, thresholds) = metrics.roc_curve(y, p)
 
 	with subplots(filename) as (fig, ax):
-		ax: plt.Axes
 		ax.plot(fpr, tpr)
 
 		ax.set_xlabel("False positives rate")
 		ax.set_ylabel("True positives rate")
 
 
-def plot_pre_rec(y, p, filename=None):
+# Prevision vs Recall curve
+def plot_pvr(y, p, filename=None):
 	(pre, rec, thresholds) = metrics.precision_recall_curve(y, p)
 
 	with subplots(filename) as (fig, ax):
 		ax: plt.Axes
 		ax.plot(pre, rec)
 
-		ax.set_xlabel("P(is fraud | called) = Precision")
-		ax.set_ylabel("P(called | is fraud) = Recall")
+		ax.set_xlabel("Precision = P(is fraud | called)")
+		ax.set_ylabel("Recall = P(called | is fraud)")
 
 
 # ~~~~ DATA SOURCE ~~~~ #
@@ -154,9 +176,8 @@ def get_data() -> pd.DataFrame:
 		df = pd.read_csv(fd, compression='zip')
 
 	# Add a time-of day feature
-	# Column name starts with 'V'
 	SECONDS_IN_A_DAY = (60 * 60 * 24)
-	df = df.assign(VH=(df['Time'].mod(SECONDS_IN_A_DAY)))
+	df = df.assign(TimeH=(df['Time'].mod(SECONDS_IN_A_DAY)))
 
 	return df
 
@@ -172,7 +193,7 @@ def show_data_summary(df: pd.DataFrame):
 		print(df.describe(), file=fd)
 
 		# Category frequencies
-		print("Class frequencies:", dict(Counter(df['Class']).most_common(10)), file=fd)
+		print("Class frequencies:", dict(Counter(df[PARAM['data_label_column']]).most_common(10)), file=fd)
 
 		# Missing data
 		print("Null values:", df.isnull().sum().sum(), file=fd)
@@ -180,22 +201,17 @@ def show_data_summary(df: pd.DataFrame):
 	# Class histograms by column
 	for column in df.columns:
 
-		(fig, ax) = subplots()
+		with subplots(PARAM['first_summary'].format(of=commons.safe_filename(column), ext="png")) as (fig, ax):
 
-		for label in set(df['Class']):
-			df.loc[df.Class == label, column].hist(ax=ax, bins='fd', alpha=0.5, label=label)
+			for label in set(df[PARAM['data_label_column']]):
+				df.loc[df.Class == label, column].hist(ax=ax, bins='fd', alpha=0.5, label=label)
 
-		ax.set_xlabel("Column: {}".format(column))
-		ax.set_ylabel("Count")
+			ax.set_xlabel("Column: {}".format(column))
+			ax.set_ylabel("Count")
 
-		ax.set_yscale('log')
-		ax.grid(zorder=-10)
-		ax.legend()
-
-		with open(PARAM['first_summary'].format(of=commons.safe_filename(column), ext="png"), 'wb') as fd:
-			fig.savefig(fd, **commons.USUAL_ARGS['savefig'])
-
-		plt.close(fig)
+			ax.set_yscale('log')
+			ax.grid(zorder=-10)
+			ax.legend()
 
 
 def tsne(df):
@@ -203,25 +219,20 @@ def tsne(df):
 
 	rs = PARAM['first_tsne_rs']
 
-	for run in range(1):
+	for run in range(3):
 		logger.debug("Computing TSNE embedding")
-		x = TSNE(random_state=rs).fit_transform(X)
+		x = TSNE(random_state=rs, n_jobs=commons.PARALLEL_MAP_CPUS).fit_transform(X.values)
 
 		logger.debug("Plotting TSNE embedding")
 
-		(fig, ax) = subplots()
+		with subplots(PARAM['first_tsne_fig'].format(run=run, ext="png")) as (fig, ax):
 
-		for label in set(y):
-			i = (y == label)
-			ax.scatter(x[i, 0], x[i, 1], s=1)
+			for label in set(y):
+				i = (y == label)
+				ax.scatter(x[i, 0], x[i, 1], s=1)
 
-		ax.set_xticks([])
-		ax.set_yticks([])
-
-		with open(PARAM['first_tsne_fig'].format(run=run, ext="png"), 'wb') as fd:
-			fig.savefig(fd, **commons.USUAL_ARGS['savefig'])
-
-		plt.close(fig)
+			ax.set_xticks([])
+			ax.set_yticks([])
 
 
 # ~~~~ TRAINING ~~~~ #
@@ -237,13 +248,17 @@ def train(df):
 
 	# Set up classification model
 
-	usual_model_params = {'random_state': rs, 'class_weight': "balanced", 'n_jobs': commons.PARALLEL_MAP_CPUS}
+	usual_model_params = {'random_state': rs, 'class_weight': "balanced"}
 
-	# Random forest
-	core_model = RandomForestClassifier(n_estimators=1111, max_depth=4, **usual_model_params)
+	# # Random forest
+	# core_model = RandomForestClassifier(n_estimators=1111, max_depth=4, n_jobs=commons.PARALLEL_MAP_CPUS, **usual_model_params)
 
 	# # Logistic regression
 	# core_model = LogisticRegression(solver='lbfgs', max_iter=1000, **usual_model_params)
+
+	# RBF with SVM
+	# https://www.kaggle.com/c/home-credit-default-risk/discussion/63499
+	core_model = SVC(probability=True, **usual_model_params)
 
 	# Set up the full model pipeline
 	pipeline = Pipeline([
@@ -276,10 +291,10 @@ def train(df):
 		print("Classification report ({} set):".format(meta))
 		print(metrics.classification_report(y, pipeline.predict(X), digits=3))
 
-		# Precision/Recall and ROC curves
+		# Precision-vs-recall curve, ROC curve
 
-		plot_pre_rec(y, fraud_proba)
-		plot_roc(y, fraud_proba)
+		plot_pvr(y, fraud_proba, filename=(PARAM['pvr_fig'].format(dataset=meta, ext="png")))
+		plot_roc(y, fraud_proba, filename=(PARAM['roc_fig'].format(dataset=meta, ext="png")))
 
 
 # ~~ MASTER ~~ #
@@ -301,8 +316,9 @@ def main():
 		logger.info("Master: calling tsne(...)")
 		tsne(df)
 
-	logger.info("Master: calling train(...)")
-	train(df)
+	if PARAM['do_train']:
+		logger.info("Master: calling train(...)")
+		train(df)
 
 
 # ~~~~ ENTRY ~~~~ #
