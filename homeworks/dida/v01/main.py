@@ -6,6 +6,7 @@
 # Based mostly on
 # https://www.tensorflow.org/tutorials/images/segmentation
 
+
 import os, re, json
 
 import tensorflow as tf
@@ -116,10 +117,10 @@ def normalize_max(val=1):
 # ~~~ PREPROCESSING I ~~~ #
 
 def to_rg_noblue(image):
-	assert(3 == len(image.shape)), "The image has to have 3 dimensions"
+	assert(3 == len(image.shape)), "The image should have 3 dimensions: W x H x Channel"
 	assert(image.shape[2] in [3, 4]), "The image should have 3 or 4 channels"
 	if (image.shape[2] == 3):
-		# Introduce a zero alpha channel
+		# Introduce an all-zero alpha channel
 		image = tf.pad(image, [(0, 0), (0, 0), (0, 1)])
 	return image
 
@@ -236,6 +237,7 @@ def make_tf_dataset(df: pd.DataFrame) -> tf.data.Dataset:
 
 	ds = tf.data.Dataset.from_tensor_slices((X, y))
 
+	# https://cs230-stanford.github.io/tensorflow-input-data.html
 	ds = ds.shuffle(SHUFFLE_BUFFER, seed=12)
 	ds = ds.repeat(8)
 	ds = ds.map(transmogrify_datapoint, num_parallel_calls=4)
@@ -291,6 +293,7 @@ def upsample_layer(filters, name, dropout_rate=(1/2)):
 	return upsampler
 
 
+# Predictor definition
 # Based heavily on (2019-10-09)
 # https://www.tensorflow.org/tutorials/images/segmentation
 def make_model():
