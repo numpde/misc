@@ -6,8 +6,9 @@
 \usepackage[dvipsnames]{xcolor}
 \usepackage{amssymb, amsmath}
 \usepackage{parskip, enumitem}
-\usepackage{hyperref}
 \usepackage{graphicx}
+\usepackage{hyperref}
+\hypersetup{colorlinks, linkcolor={red!50!black}, citecolor={blue!50!black}, urlcolor={blue!80!black}}
 
 \DeclareGraphicsExtensions{.eps, .png, .gif, .pdf, .jpg}
 \graphicspath{{../v01/OUTPUT/}}
@@ -33,7 +34,7 @@
     The satellite images shown below are from Mapbox
     in the vicinity of Rosdorf/G\"ottingen, Germany,
     obtained as described in 
-    R.A., ``Rendered maps with Python'' on Medium.
+    R.A., \href{https://medium.com/@busybus/rendered-maps-with-python-ffba4b34101c}{``Rendered maps with Python''} on Medium.
     %
     The grayscale label images are constructed 
     from OpenStreetMap data,
@@ -128,7 +129,7 @@
     The predictor is 
     constructed 
     by tapping into several 
-    progressivily narrow layers 
+    progressively narrow layers 
     of the pretrained and frozen
     image classifier MobileNetV2 (encoder)
     and
@@ -217,7 +218,7 @@
     \begin{figure}[p]
         \centering
         \includegraphics[width=0.9\textwidth]{images/full_model}
-        \caption{Neural net architecture}
+        \caption{Neural net architecture on top of MobileNetV2.}
         \label{f:model}
     \end{figure}
 
