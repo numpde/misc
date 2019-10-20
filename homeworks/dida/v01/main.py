@@ -24,7 +24,7 @@ import logging as logger
 # https://docs.python.org/3/library/contextlib.html#contextlib.redirect_stdout
 from contextlib import redirect_stdout as stdout_to
 
-import plot_history
+from . import plot_history
 
 # https://pypi.org/project/percache/
 # import percache
@@ -81,7 +81,7 @@ PARAM = {
 	'transmogrify_rs': np.random.RandomState(8),
 
 	# Settings for model.fit
-	'training': dict(epochs=55),
+	'training': dict(epochs=33),
 
 	# Output: Neural net summary
 	'out_base_model_info': makedirs("OUTPUT/info/base_model.txt"),
@@ -232,8 +232,6 @@ def make_tf_dataset(df: pd.DataFrame) -> tf.data.Dataset:
 	X = tf.stack(list(map(PARAM['to_modeling_size'], df['image'])))
 	y = tf.stack(list(map(PARAM['to_modeling_size'], map(normalize_max(1), df['label']))))
 
-	# X = tf.stack([tf.stack(df_train['image'])], axis=1)
-
 	logger.debug("X.shape = {}, y.shape = {}".format(X.shape, y.shape))
 
 	ds = tf.data.Dataset.from_tensor_slices((X, y))
@@ -273,25 +271,18 @@ def upsample_layer(filters, name, dropout_rate=(1/2)):
 	upsampler = tf.keras.Sequential(
 		[
 			tf.keras.layers.Conv2DTranspose(
-				filters, kernel_size=3, strides=1, padding='same', use_bias=False,
+				2 * filters, kernel_size=3, strides=1, padding='same', use_bias=False,
 				kernel_initializer=tf.random_normal_initializer(0., 0.02),
 			),
-			tf.keras.layers.ReLU(),
 			tf.keras.layers.Dropout(dropout_rate),
-
-			# tf.keras.layers.Conv2D(
-			# 	2*filters, kernel_size=3, strides=1, padding='same', use_bias=False,
-			# 	kernel_initializer=tf.random_normal_initializer(0., 0.02),
-			# ),
-			# tf.keras.layers.ReLU(),
-			# tf.keras.layers.Dropout(dropout_rate),
+			tf.keras.layers.ReLU(),
 
 			tf.keras.layers.Conv2DTranspose(
 				filters, kernel_size=3, strides=2, padding='same', use_bias=False,
 				kernel_initializer=tf.random_normal_initializer(0., 0.02),
 			),
-			tf.keras.layers.Dropout(dropout_rate),
 			tf.keras.layers.BatchNormalization(),
+			tf.keras.layers.Dropout(dropout_rate),
 			tf.keras.layers.ReLU(),
 		],
 		name=name
@@ -363,9 +354,9 @@ def make_model():
 			#
 			for (n, filters) in enumerate([
 				# 8, #  4x4  ->  8x8
-				16, #  8x8  -> 16x16
-				16, # 16x16 -> 32x32
-				16, # 32x32 -> 64x64
+				8, #  8x8  -> 16x16
+				8, # 16x16 -> 32x32
+				8, # 32x32 -> 64x64
 			])
 		]
 
