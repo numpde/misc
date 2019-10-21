@@ -47,8 +47,8 @@
     \subsubsection*{Problem statement \& datasets}
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     
-    The task is to label buildings in satellite images of 
-    rural areas as follows:
+    The task is to label house roofs in satellite images of 
+    rural areas roughly as follows:
     
     \begin{center}
         \begin{minipage}{0.3\textwidth}
@@ -65,6 +65,12 @@
             \includegraphics[width=\textwidth]{from_josm/rosdorf/examples/label_3DJFEM}
         \end{minipage}
     \end{center}
+    
+    A possible application is 
+    identification of inhabited areas of interest
+    for the solar panels market. 
+    
+    %
     
     The ``Dida'' dataset contains 
     %
@@ -109,7 +115,9 @@
     downscaled to $128 \times 128$
     and
     augmented $8$-fold by 
-    rotation and mirroring.
+    random rotation and mirroring
+    for training
+    (resulting in a handful of duplicates even across training and validation sets).
 
     
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -182,8 +190,22 @@
         on both ``Dida'' and ``Mapbox/JOSM'' datasets (Scenario II).
     \end{itemize}
     
-    The results are shown in Fig.~\ref{f:loss} and \ref{f:labels}.
+    The behavior of the loss on the training and validation datasets
+    during training
+    is reasonable, see Fig.~\ref{f:loss}.
+    %
+    Beyond $~$33 training epochs, the validation loss increases (not shown).
     
+    %
+    
+    The predicted labels
+    along with hand-drawn expected labels
+    are shown in Fig.~\ref{f:labels}.
+    
+    %
+    
+    
+    %
     
     \begin{figure}[p]
         \centering
@@ -204,14 +226,25 @@
         \includegraphics[width=0.19\textwidth]{images/data_onlydida/predictions/539}
         \includegraphics[width=0.19\textwidth]{images/data_onlydida/predictions/551}
         \includegraphics[width=0.19\textwidth]{images/data_onlydida/predictions/553}
-        
+        %
+        \\[1px]
+        %
         \includegraphics[width=0.19\textwidth]{images/data_withjosm/predictions/535}
         \includegraphics[width=0.19\textwidth]{images/data_withjosm/predictions/537}
         \includegraphics[width=0.19\textwidth]{images/data_withjosm/predictions/539}
         \includegraphics[width=0.19\textwidth]{images/data_withjosm/predictions/551}
         \includegraphics[width=0.19\textwidth]{images/data_withjosm/predictions/553}
+        %
+        \\[1px]
+        %
+        \includegraphics[width=0.19\textwidth]{images/data_onlydida/labels_by_hand/535}
+        \includegraphics[width=0.19\textwidth]{images/data_onlydida/labels_by_hand/537}
+        \includegraphics[width=0.19\textwidth]{images/data_onlydida/labels_by_hand/539}
+        \includegraphics[width=0.19\textwidth]{images/data_onlydida/labels_by_hand/551}
+        \includegraphics[width=0.19\textwidth]{images/data_onlydida/labels_by_hand/553}
         
-        \caption{Missing Dida labels, scenario I (top) and II (bottom).}
+        \caption{Missing Dida labels top-to-bottom:
+        scenario I / scenario II / hand-made.}
         \label{f:labels}
     \end{figure}
 
