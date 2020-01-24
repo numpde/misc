@@ -1,0 +1,183 @@
+\documentclass[12pt,a4paper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage{amssymb, amsmath}
+\usepackage{fullpage}
+\usepackage{parskip}
+\usepackage{url}
+\usepackage[dvipsnames]{xcolor}
+\usepackage{enumitem}
+\usepackage{graphicx}
+
+\renewcommand{\vec}[1]{\mathbf{#1}}
+\newcommand{\from}{\colon}
+\newcommand{\IR}{\mathbb{R}}
+\newcommand{\IN}{\mathbb{N}}
+\newcommand{\norm}[1]{\left\|#1\right\|}
+
+\begin{document}
+    
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    On a question with containers
+    \hfill
+    RA, \today
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    
+	\subsection*{Problem setup}
+    
+	There are three water containers.
+	%
+	Containers \#1 and \#2 have outflows into \#3.
+	%
+	Container \#2 is constantly fed through a tap.
+	%
+	Container \#3 is being drained through an opening.
+	%
+	What are the water levels in the containers?
+	
+	\subsection*{Notation}
+	
+	At any given time, for the container $k = 1, 2, 3$,
+	\begin{itemize}
+	\item 
+		the water level is $h_k$ [$\text{m}$],
+	\item
+		the water volume is $V_k$ [$\text{m}^3$],
+	\item
+		the container capacity is $V_k^\text{max}$ [$\text{m}^3$],
+	\item
+		the outflow is $y_k \geq 0$ [$\mathrm{m^3/s}$]
+		and
+		the inflow is $x_k \geq 0$ [$\mathrm{m^3/s}$].
+	\end{itemize}
+	%
+	
+	\subsection*{ODE}
+	
+	This is sufficient to formulate the following ODEs.
+	%
+	As long as no container is maximally filled, we have
+	\begin{subequations}
+		\begin{align}
+			\tfrac{d}{dt} V_1 & = -y_1 , \\
+			\tfrac{d}{dt} V_2 & = -y_2 + x_2 , \\
+			\tfrac{d}{dt} V_3 & = -y_3 + y_1 + y_2 .
+		\end{align}
+	\end{subequations}
+	
+	More generally,
+	if a container is maximally filled
+	then
+	the water volume is allowed to decrease but not increase,
+	thus
+	(the first $\min$ is redundant)
+	\begin{subequations}
+		\begin{align}
+			\tfrac{d}{dt} V_1 & = \min\{ 0, -y_1 \} , \\
+			\tfrac{d}{dt} V_2 & = \min\{ 0, -y_2 + x_2 \} , \\
+			\tfrac{d}{dt} V_3 & = \min\{ 0, -y_3 + y_1 + y_2 \} .
+		\end{align}
+	\end{subequations}
+	%
+	Here
+	we anticipate the physically meaningful setup
+	that
+	an empty container yields no outflow,
+	while
+	a full container simply spills over water that is lost
+	rather than flowing into one of the other containers.
+	
+	\subsection*{Assumptions}
+	
+	The following are reasonable assumptions
+	but subject to discussion.
+	%
+	\begin{itemize}
+	\item
+		All free water surfaces are in contact with the atmosphere
+		and the temperature is room temperature throughout.
+	\item
+		Container $k$ has a constant horizontal cross-section 
+		of area $A_k$ [$\text{m}^2$].
+	\item
+		The tap supply of container \#2
+		is at a constant rate $x_2 \geq 0$ [$\mathrm{m^3 / s}$].
+	\item
+		We neglect the initiation time
+		when any valves are opened,
+		i.e.~we start with a fully developed flow.
+	\item
+		The flows $y_1$ and $y_2$ are unregulated flows
+		due to geometry and gravity only.
+		%
+		The opening is merely an orifice or at most 
+		a short pipe pointing straight down out of 
+		the bottom of the container
+		and
+		of cross-section $a_k$ [$\mathrm{m^2}$]
+		that is relatively thin
+		compared to the container dimensions.
+	\item
+		Water density is constant at $\rho$ [$\mathrm{kg/m^3}$].
+		%
+		The graviational acceleration is $g$ [$\mathrm{m/s^2}$].
+		
+	\item
+		Friction losses at walls and due to viscosity are ignored.
+		%
+		Standard engineering assumptions of incompressible flow,
+		in particular
+		there is 
+		(negligible flow and)
+		static pressure of $(g \rho h_k + \mathrm{1atm})$ in the container 
+		at the orifice
+		and
+		$\mathrm{1atm}$
+		just outside the orifice;
+		by the Bernoulli equation of flow, this translates
+		into an outflow velocity $v_k$
+		given by
+		$\frac12 \rho v_k^2 = g \rho h_k$.
+		%
+		In reality, the flow is smaller due to ``geometrical conditions''
+		(cf.~discharge coefficient).
+		
+		The same outflow velocity is obtained if we simply
+		assume that
+		the water column above the orifice 
+		falls straight through the opening without any friction
+		while being ``refilled'' 
+		from the top water layer of the container.
+	\end{itemize}
+	
+	\subsection*{Closure of the ODE system}
+	
+	The ODE system can now be supplemented 
+	and
+	fully specified
+	(up to initial conditions)
+	with the following
+	equations
+	($k = 1, 2, 3$):
+	\begin{align}
+		\text{water volume}: \quad
+		V_k & = A_k h_k,
+		\\
+		\text{outflow}: \quad
+		y_k & = a_k v_k = a_k \sqrt{ 2 g h_k }
+		.
+	\end{align}
+
+% 	\subsection*{Solution}
+% 	
+% 	The full ODE system probably does not admit 
+% 	a closed-form analytic solution,
+% 	but
+% 	the first equation $\tfrac{d}{dt} V_1 = -y_1$
+% 	does.
+% 	%
+% 	After simplification, we have
+% 	$\tfrac{d}{dt} h_1 = -c_1 \sqrt{h_1}$
+% 	where $c_1 = \frac{a_k}{A_k} \sqrt{ 2 g }$.
+\end{document}
