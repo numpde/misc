@@ -1,0 +1,27 @@
+Loaded data from: ../data/2/SamplePortfolio.xlsx
+Warning: scenario not found 'JPY IR down'
+Warning: scenario not found 'JPY IR up'
++----------------+------------------------------+------------+------------+-----------+-----------+-----------+-------------+
+| Asset type     | Asset ID                     |      FX up |    FX down |     IR up |   IR down |   EQ down |   Spread up |
+|----------------+------------------------------+------------+------------+-----------+-----------+-----------+-------------|
+| Equity options | SX5E Index 03/31 P 3700      |  -34627.3  |  -20776.4  |     nan   |     nan   |       nan |         nan |
+| Bonds          | TNOTE                        |  101057    |  101057    |     nan   |     nan   |       nan |       99952 |
+| FX forward     | FWD B:USD S:JPY 106 09/30    | -115091    |  -69054.3  |  -92072.3 |  -92072.3 |       nan |         nan |
+| Bonds          | UKST                         |  335194    |  201116    |     nan   |     nan   |       nan |         nan |
+| Stocks         | SX5E                         |  157815    |   94689.2  |     nan   |     nan   |       nan |         nan |
+| Stocks         | NIKKEI225                    |   27209.2  |   16325.5  |     nan   |     nan   |       nan |         nan |
+| Stocks         | SMI                          |   68562.4  |   41137.4  |     nan   |     nan   |       nan |         nan |
+| FX forward     | FWD B:EUR S:USD 1.1205 06/30 | -411156    | -411156    | -409220   | -413243   |       nan |         nan |
+| Stocks         | SPASX                        |   29366.3  |   17619.8  |     nan   |     nan   |       nan |         nan |
+| Cash           | USD                          |  100000    |  100000    |     nan   |     nan   |       nan |         nan |
+| Bonds          | DBUND                        |  148811    |   89286.7  |     nan   |     nan   |       nan |      117517 |
+| Cash           | JPY                          |   34505.2  |   20703.1  |     nan   |     nan   |       nan |         nan |
+| FX forward     | FWD B:EUR S:USD 1.1205 06/30 |  520342    |  312205    |  414208   |  416272   |       nan |         nan |
+| Equity options | SP500 Index 06/30 C 3200     |   28488.4  |   28488.4  |     nan   |     nan   |       nan |         nan |
+| Cash           | EUR                          |   70168.8  |   42101.3  |     nan   |     nan   |       nan |         nan |
+| Equity futures | E-MINI U                     |  -17947    |  -17947    |     nan   |     nan   |       nan |         nan |
+| Equity futures | NIKKEI 225 U                 |   -3063.75 |   -1838.25 |     nan   |     nan   |       nan |         nan |
+| FX forward     | FWD B:USD S:JPY 106 09/30    |   93169.3  |   93169.3  |   92507.7 |   93880.4 |       nan |         nan |
+| Stocks         | SP500                        |  129231    |  129231    |     nan   |     nan   |       nan |         nan |
++----------------+------------------------------+------------+------------+-----------+-----------+-----------+-------------+
+Saved to: SamplePortfolio_Filled.xlsx
